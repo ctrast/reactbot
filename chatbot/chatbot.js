@@ -2,7 +2,14 @@
 const dialogflow = require('dialogflow');
 const {struct} = require('pb-util');
 const config = require('../config/keys');
-const sessionClient = new dialogflow.SessionsClient();
+
+const projectID =config.googleProjectID;
+const credentials = {
+    client_email: config.googleClientEmail,
+    private_key: config.googlePrivateKey
+}
+
+const sessionClient = new dialogflow.SessionsClient({projectID , credentials});
 const sessionPath = sessionClient.sessionPath(config.googleProjectID, config.dialogFlowSessionID)
 
 module.exports = {
@@ -24,7 +31,7 @@ module.exports = {
         };
         let responses = await sessionClient.detectIntent(request)
         responses = await self.handleAction(responses)
-        return response;
+        return responses;
     },
 
     eventQuery: async function (event, parameters = {}) {
@@ -49,7 +56,7 @@ module.exports = {
         return response;
     },
 
-    handleAction: function (responsees) {
+    handleAction: function (responses) {
         return responses;
     },
 }
